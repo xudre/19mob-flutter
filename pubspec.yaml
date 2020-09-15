@@ -29,6 +29,21 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.3
 
+  # MobX
+  mobx: ^1.2.1+2
+  # Provider
+  provider: ^4.3.2+2
+  # GetIt
+  get_it: ^5.0.0
+  # Dio (http client)
+  dio: ^3.0.10
+  # Firebase Firestore
+  cloud_firestore: ^0.14.0+2
+  # FCM
+  firebase_messaging: ^7.0.0
+  # Google Maps
+  google_maps_flutter: ^0.5.32
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
