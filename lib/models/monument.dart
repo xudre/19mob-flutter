@@ -6,8 +6,14 @@ class Monument {
   final String name;
   final String description;
   final MonumentLocation location;
+  final String image;
 
-  Monument({@required this.id, @required this.name, @required this.description, @required this.location})
+  Monument(
+      {@required this.id,
+      @required this.name,
+      @required this.description,
+      @required this.location,
+      @required this.image})
       : assert(id != null),
         assert(name != null),
         assert(description != null),
@@ -17,5 +23,6 @@ class Monument {
       id: data["id"],
       name: data["name"],
       description: data["description"],
-      location: MonumentLocation.fromJson(data["location"]));
+      location: MonumentLocation.fromJson(data["location"]),
+      image: data["image"]);
 }
