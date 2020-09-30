@@ -66,13 +66,13 @@ class _DetailPageState extends State<DetailPage> {
             Container(
               height: 10.0,
             ),
-            GoogleMap(
-              mapType: MapType.hybrid,
-              initialCameraPosition: _monumentPosition,
-              onMapCreated: (GoogleMapController controller) {
-                _controller.complete(controller);
-              },
-            ),
+            // GoogleMap(
+            //   mapType: MapType.hybrid,
+            //   initialCameraPosition: _monumentPosition,
+            //   onMapCreated: (GoogleMapController controller) {
+            //     _controller.complete(controller);
+            //   },
+            // ),
           ],
         ),
       ),
