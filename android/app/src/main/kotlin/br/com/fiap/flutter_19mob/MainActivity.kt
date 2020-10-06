@@ -16,9 +16,10 @@ class MainActivity: FlutterActivity() {
         //criamos um ouvinte que responde a chamadas do código DART
         MethodChannel(flutterEngine.dartExecutor.binaryMessenger, CHANNEL).setMethodCallHandler {
             call, result ->
+            val value: String? = call.argument("value")
             val intent = Intent()
             intent.action = Intent.ACTION_SEND
-            intent.putExtra(Intent.EXTRA_TEXT, "test")
+            intent.putExtra(Intent.EXTRA_TEXT, value)
             intent.setType("text/plain")
             startActivity(intent)
             result.success("")
