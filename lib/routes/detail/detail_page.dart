@@ -27,32 +27,6 @@ class _DetailPageState extends State<DetailPage> {
 
   GoogleMapController _controller;
 
-  // showAlertDialog(BuildContext context) {
-  //   // set up the button
-  //   Widget okButton = FlatButton(
-  //     child: Text("OK"),
-  //     onPressed: () {},
-  //   );
-
-  //   // set up the AlertDialog
-  //   AlertDialog alert = AlertDialog(
-  //     title: Text("Platform Channel"),
-  //     content: Text("response."),
-  //     actions: [
-  //       okButton,
-  //     ],
-  //   );
-
-  //   // show the dialog
-  //   showDialog(
-  //     context: context,
-  //     builder: (BuildContext context) {
-  //       return alert;
-  //     },
-  //   );
-  // }
-
-  // int _numberSensors = 0;
   static const platform = const MethodChannel('app/share');
 
   void _shareINDevice() async {
