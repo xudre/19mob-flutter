@@ -11,6 +11,7 @@ import 'package:flutter_19mob/models/monument.dart';
 import 'package:flutter_19mob/routes/detail/detail_page_arguments.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:mobx/mobx.dart';
 
 class DetailPage extends StatefulWidget {
   static const routeName = "/detail";
@@ -23,7 +24,7 @@ class _DetailPageState extends State<DetailPage> {
   Monument _monument;
 
   CameraPosition _monumentPosition;
-  String _monumentAddress = "Carregando...";
+  final _monumentAddress = Observable("Carregando...");
 
   GoogleMapController _controller;
 
@@ -47,9 +48,9 @@ class _DetailPageState extends State<DetailPage> {
 
     Map<String, dynamic> data = response.data;
 
-    setState(() {
-      _monumentAddress = data["logradouro"] + ", " + data["bairro"];
+    _monumentAddress.value = data["logradouro"] + ", " + data["bairro"];
 
+    setState(() {
       MarkerId markerId = MarkerId(_monument.id);
 
       _controller.hideMarkerInfoWindow(markerId);
@@ -132,7 +133,7 @@ class _DetailPageState extends State<DetailPage> {
                     markerId: MarkerId(_monument.id),
                     position: _monumentPosition.target,
                     infoWindow: InfoWindow(
-                        title: "Endereço", snippet: _monumentAddress),
+                        title: "Endereço", snippet: _monumentAddress.value),
                   )),
                 initialCameraPosition: _monumentPosition,
                 zoomControlsEnabled: false,
