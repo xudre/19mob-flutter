@@ -5,14 +5,18 @@ import 'package:flutter_19mob/routes/home/home_page.dart';
 
 class AppNavigator extends StatelessWidget {
   final GlobalKey<NavigatorState> _key;
+  final List<NavigatorObserver> _observers;
 
-  AppNavigator(this._key) : assert(_key != null);
+  AppNavigator(this._key, this._observers)
+      : assert(_key != null),
+        assert(_observers != null);
 
   @override
   Widget build(BuildContext context) {
     return Navigator(
       key: _key,
       initialRoute: HomePage.routeName,
+      observers: _observers,
       onGenerateRoute: (settings) {
         var builder;
 

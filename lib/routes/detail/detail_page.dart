@@ -55,7 +55,7 @@ class _DetailPageState extends State<DetailPage> {
 
       _controller.hideMarkerInfoWindow(markerId);
 
-      Future.delayed(Duration(milliseconds: 300))
+      Future.delayed(Duration(milliseconds: 1000))
           .then((value) => _controller.showMarkerInfoWindow(markerId));
     });
   }
