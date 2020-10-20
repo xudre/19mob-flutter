@@ -5,14 +5,23 @@ import 'package:flutter_19mob/routes/home/home_page.dart';
 class AppNavigationBar extends StatefulWidget {
   final GlobalKey<NavigatorState> _navigatorKey;
 
-  AppNavigationBar(this._navigatorKey) : assert(_navigatorKey != null);
+  const AppNavigationBar(GlobalKey<AppNavigationBarState> key, this._navigatorKey)
+      : assert(key != null),
+        assert(_navigatorKey != null),
+        super(key: key);
 
   @override
-  _AppNavigationBarState createState() => _AppNavigationBarState();
+  AppNavigationBarState createState() => AppNavigationBarState();
 }
 
-class _AppNavigationBarState extends State<AppNavigationBar> {
+class AppNavigationBarState extends State<AppNavigationBar> {
   int _onIndex = 0;
+
+  void setIndex(int value) {
+    setState(() {
+      _onIndex = value;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

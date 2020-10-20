@@ -9,7 +9,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_19mob/main.dart';
 import 'package:flutter_19mob/models/monument.dart';
 import 'package:flutter_19mob/routes/detail/detail_page_arguments.dart';
-import 'package:get_it/get_it.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:mobx/mobx.dart';
 
@@ -25,8 +24,10 @@ class _DetailPageState extends State<DetailPage> {
 
   CameraPosition _monumentPosition;
   final _monumentAddress = Observable("Carregando...");
+  bool _monumentAddressLoaded = false;
 
   GoogleMapController _controller;
+  bool _mapInitialized = false;
 
   static const platform = const MethodChannel('app/share');
 
@@ -35,7 +36,7 @@ class _DetailPageState extends State<DetailPage> {
       // final int numberSensors = await platform.invokeMethod("share");
       await platform.invokeMethod("share", {"value": _monument.description});
       setState(() {});
-    } on PlatformException catch (e) {}
+    } on PlatformException catch (_) {}
   }
 
   void _loadAddressFromZipCode() async {
@@ -43,20 +44,30 @@ class _DetailPageState extends State<DetailPage> {
 
     String zipCode = _monument.location.zipCode.replaceAll("-", "").trim();
 
-    Response response =
-        await dio.get("https://viacep.com.br/ws/$zipCode/json/");
+    Response response = await dio.get("https://viacep.com.br/ws/$zipCode/json/");
 
     Map<String, dynamic> data = response.data;
 
     _monumentAddress.value = data["logradouro"] + ", " + data["bairro"];
 
-    setState(() {
-      MarkerId markerId = MarkerId(_monument.id);
+    _monumentAddressLoaded = true;
 
-      _controller.hideMarkerInfoWindow(markerId);
+    if (_mapInitialized) {
+      _showAddressFromZipCode();
+    }
+  }
 
-      Future.delayed(Duration(milliseconds: 1000))
-          .then((value) => _controller.showMarkerInfoWindow(markerId));
+  void _showAddressFromZipCode() async {
+    MarkerId markerId = MarkerId(_monument.id);
+
+    _controller.isMarkerInfoWindowShown(markerId).then((visible) {
+      setState(() {
+        if (visible) {
+          _controller.hideMarkerInfoWindow(markerId);
+        }
+
+        Future.delayed(Duration(milliseconds: 300)).then((value) => _controller.showMarkerInfoWindow(markerId));
+      });
     });
   }
 
@@ -132,22 +143,25 @@ class _DetailPageState extends State<DetailPage> {
                   ..add(Marker(
                     markerId: MarkerId(_monument.id),
                     position: _monumentPosition.target,
-                    infoWindow: InfoWindow(
-                        title: "Endereço", snippet: _monumentAddress.value),
+                    infoWindow: InfoWindow(title: "Endereço", snippet: _monumentAddress.value),
                   )),
                 initialCameraPosition: _monumentPosition,
                 zoomControlsEnabled: false,
                 compassEnabled: true,
                 onMapCreated: (GoogleMapController controller) {
+                  _mapInitialized = true;
+
                   setState(() {
                     _controller = controller;
 
                     _controller.showMarkerInfoWindow(MarkerId(_monument.id));
                   });
+
+                  if (_monumentAddressLoaded) {
+                    _showAddressFromZipCode();
+                  }
                 },
-                gestureRecognizers: Set()
-                  ..add(Factory<EagerGestureRecognizer>(
-                      () => EagerGestureRecognizer())),
+                gestureRecognizers: Set()..add(Factory<EagerGestureRecognizer>(() => EagerGestureRecognizer())),
               ),
             ),
           ],
